@@ -1,0 +1,25 @@
+- name: Stop Azure VM
+  hosts: localhost
+  connection: local
+  collections:
+    - azure.azcollection
+  vars:
+    federated_login:
+      is_set: "{{ lookup('ansible.builtin.env', 'AZURE_FEDERATED_TOKEN_FILE', default=undefined) }}"
+  tasks:
+    - name: az federated login
+      ansible.builtin.shell: az login --service-principal -u $AZURE_CLIENT_ID -t $AZURE_TENANT_ID --federated-token $(cat $AZURE_FEDERATED_TOKEN_FILE)
+      when: federated_login.is_set is defined
+      args:
+        executable: /bin/bash
+    
+    - name: Stop virtual machine
+      azure_rm_virtualmachine:
+        resource_group: "{{ resource_group_name }}"
+        name: "{{ name }}"
+        started: no
+      register: result
+
+    - copy:
+        content: "{{ result }}"
+        dest: "qtorque_outputs.json"
