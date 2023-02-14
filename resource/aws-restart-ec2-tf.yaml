@@ -1,21 +1,21 @@
-- name: Start Aws EC2
+- name: Restart Aws EC2 
   hosts: localhost
   connection: local
   tasks:
-    - name: start ec2 instance by its ID
+    - name: restart ec2 instance by its ID
       amazon.aws.ec2_instance:
-        state: restarted
-        wait: True
         instance_ids:
           - "{{ id }}"
         region: "{{ (arn | split(':'))[3] }}"
-    
-    - name: gather information about the instance
+        state: restarted
+        wait: true
+        
+    - name: gather information about the ec2 instance
       amazon.aws.ec2_instance_info:
         instance_ids:
-          - {{ id }}
+          - "{{ id }}"
       register: result
       
     - copy:
-        content: "{{ result }}"
-        dest: "qtorque_outputs.json"
+        content: {{ result }}
+        dest: qtorque_outputs.json
