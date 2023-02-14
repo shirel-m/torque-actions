@@ -17,5 +17,5 @@
       register: result
       
     - copy:
-        content: {{ result }}
+        content: "{{ result }}"
         dest: qtorque_outputs.json
