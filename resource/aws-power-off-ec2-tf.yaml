@@ -9,8 +9,13 @@
         instance_ids:
           - "{{ id }}"
         region: "{{ (arn | split(':'))[3] }}"
+        
+    - name: gather information about the instance
+      amazon.aws.ec2_instance_info:
+        instance_ids:
+          - {{ id }}
       register: result
-      
+     
     - copy:
         content: "{{ result }}"
         dest: "qtorque_outputs.json"
