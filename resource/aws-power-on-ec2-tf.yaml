@@ -1,10 +1,10 @@
-- name: Stop Aws EC2
+- name: Start Aws EC2
   hosts: localhost
   connection: local
   tasks:
-    - name: stop ec2 instance by its ID
+    - name: start ec2 instance by its ID
       amazon.aws.ec2_instance:
-        state: stopped
+        state: running
         wait: True
         instance_ids:
           - "{{ id }}"
