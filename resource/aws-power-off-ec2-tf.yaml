@@ -11,7 +11,7 @@
         wait: true
         
     - name: gather information about the ec2 instance
-      amazon.aws.ec2_instance_info:
+      amazon.aws.ec2_instance:
         instance_ids:
           - "{{ id }}"
       register: result
