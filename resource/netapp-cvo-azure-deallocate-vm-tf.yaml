@@ -1,4 +1,4 @@
-- name: Stop NetApp CVO Azure VM
+- name: Deallocate NetApp CVO Azure VM
   hosts: localhost
   connection: local
   collections:
@@ -15,11 +15,11 @@
       args:
         executable: /bin/bash
 
-    - name: Stop virtual machine
+    - name: Deallocate virtual machine
       azure_rm_virtualmachine:
         resource_group: "{{ resource_group_name }}"
         name: "{{ vm.name }}"
-        started: no
+        allocated: no
       register: result
 
     - copy:
