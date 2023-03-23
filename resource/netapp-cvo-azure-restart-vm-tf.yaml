@@ -17,7 +17,7 @@
  
     - name: Restart virtual machine
       azure_rm_virtualmachine:
-        resource_group: "{{ resource_group_name }}"
+        resource_group: "{{ resource_group }}"
         name: "{{ vm.name }}"
         restarted: yes
       register: result
