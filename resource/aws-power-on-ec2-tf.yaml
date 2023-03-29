@@ -12,6 +12,7 @@
         
     - name: gather information about the ec2 instance
       amazon.aws.ec2_instance_info:
+        region: "{{ (arn | split(':'))[3] }}"
         instance_ids:
           - "{{ id }}"
       register: result
