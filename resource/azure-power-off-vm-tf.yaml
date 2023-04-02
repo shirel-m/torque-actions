@@ -1,4 +1,4 @@
-- name: Stop Azure VM
+- name: Deallocate Azure VM
   hosts: localhost
   connection: local
   collections:
@@ -13,11 +13,11 @@
       args:
         executable: /bin/bash
     
-    - name: Stop virtual machine
+    - name: Deallocate virtual machine
       azure_rm_virtualmachine:
         resource_group: "{{ resource_group_name }}"
         name: "{{ name }}"
-        started: no
+        allocated: no
       register: result
 
     - copy:
