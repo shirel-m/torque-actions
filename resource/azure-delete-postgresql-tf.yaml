@@ -1,6 +1,11 @@
 - name: Permanently delete an Azure PostgreSQL instance.
   hosts: localhost
   connection: local
+  collections:
+    - azure.azcollection
+  vars:
+    federated_login:
+      is_set: "{{ lookup('ansible.builtin.env', 'AZURE_FEDERATED_TOKEN_FILE', default=undefined) }}"
   tasks:
     - name: az federated login
       ansible.builtin.shell: az login --service-principal -u $AZURE_CLIENT_ID -t $AZURE_TENANT_ID --federated-token $(cat $AZURE_FEDERATED_TOKEN_FILE)
@@ -9,7 +14,7 @@
         executable: /bin/bash
         
     - name: Delete an Azure PostgreSQL instance by it's name.
-      azure.azcollection.azure_rm_postgresqldatabase:
+      azure_rm_postgresqldatabase:
         name: "{{ db_name }}"
         resource_group : "{{ (arn | split(':'))[3] }}"
         server_name : "{{ server_name }}"
