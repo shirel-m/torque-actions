@@ -18,3 +18,9 @@
         name: "{{ db_name }}"
         resource_group : "{{ (arn | split(':'))[3] }}"
         server_name : "{{ server_name }}"
+        state: "absent"
+      register: result
+    
+    - copy:
+        content: "{{ result }}"
+        dest: qtorque_outputs.json
