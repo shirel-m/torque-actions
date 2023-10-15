@@ -5,7 +5,9 @@
     - name: stop aws rds instance by its ID
       amazon.aws.rds_instance:
         db_instance_identifier: "{{ id }}"
+        db_instance_class: "{{ instance_class }}"
         region: "{{ (arn | split(':'))[3] }}"
+        engine: "{{ engine }}"
         state: stopped
         wait: true
         
