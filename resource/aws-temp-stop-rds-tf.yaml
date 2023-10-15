@@ -8,9 +8,10 @@
         db_instance_class: "{{ instance_class }}"
         master_username: "{{ username }}"
         master_user_password: "{{ password }}"
+        allocated_storage: "{{ allocated_storage }}"
         region: "{{ (arn | split(':'))[3] }}"
         engine: "{{ engine }}"
-        state: stopped
+        state: "stopped"
         wait: true
         
     - name: gather information about the rds instance
