@@ -4,13 +4,8 @@
   tasks:
     - name: stop aws rds instance by its ID
       amazon.aws.rds_instance:
-        db_instance_identifier: "{{ id }}"
-        db_instance_class: "{{ instance_class }}"
-        master_username: "{{ username }}"
-        master_user_password: "{{ password }}"
-        allocated_storage: "{{ allocated_storage }}"
+        db_instance_identifier: "{{ identifier }}"
         region: "{{ (arn | split(':'))[3] }}"
-        engine: "{{ engine }}"
         state: "stopped"
         wait: true
         
