@@ -15,8 +15,8 @@
 
     - name: Delete an Azure MariaDB instance by it's name.
       azure_rm_mariadbdatabase:
-        name: "{{ db_name }}"
-        resource_group : "{{ (arn | split(':'))[3] }}"
+        name: "{{ name }}"
+        resource_group : "{{ resource_group_name }}"
         server_name : "{{ server_name }}"
         state: "absent"
       register: result
