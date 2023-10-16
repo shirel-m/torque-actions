@@ -16,11 +16,11 @@
     - name: Delete an Azure MsSQL instance by it's name.
       azure_rm_sqldatabase:
         name: "{{ name }}"
-        resource_group : "{{ resource_group_name }}"
+        resource_group : "{{ (id | split('/'))[3] }}"
         server_name : "{{ server_name }}"
         state: "absent"
       register: result
-    
+
     - copy:
         content: "{{ result }}"
         dest: qtorque_outputs.json
