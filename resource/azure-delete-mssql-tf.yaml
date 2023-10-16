@@ -15,8 +15,8 @@
         
     - name: Delete an Azure MsSQL instance by it's name.
       azure_rm_sqldatabase:
-        name: "{{ db_name }}"
-        resource_group : "{{ (arn | split(':'))[3] }}"
+        name: "{{ name }}"
+        resource_group : "{{ resource_group_name }}"
         server_name : "{{ server_name }}"
         state: "absent"
       register: result
