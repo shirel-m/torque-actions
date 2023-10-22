@@ -13,6 +13,11 @@
       args:
         executable: /bin/bash
     
+    - name: set subscription
+      ansible.builtin.shell: az account set --subscription {{ id | regex_search('(?<=/subscriptions/)([a-fA-F0-9-]+)') }}
+      args:
+        executable: /bin/bash
+    
     - name: Deallocate virtual machine
       azure_rm_virtualmachine:
         resource_group: "{{ resource_group_name }}"
