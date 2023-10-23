@@ -1,0 +1,20 @@
+- name: Delete Aws RDS 
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: Delete aws rds instance by its ID
+      amazon.aws.rds_instance:
+        db_instance_identifier: "{{ identifier }}"
+        region: "{{ (arn | split(':'))[3] }}"
+        state: absent
+        wait: true
+        
+    - name: gather information about the rds instance
+      amazon.aws.rds_instance:
+        region: "{{ (arn | split(':'))[3] }}"
+        db_instance_identifier: "{{ identifier }}"
+      register: result
+      
+    - copy:
+        content: "{{ result }}"
+        dest: qtorque_outputs.json
