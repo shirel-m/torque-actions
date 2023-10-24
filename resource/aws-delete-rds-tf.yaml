@@ -16,11 +16,6 @@
         state: absent
         skip_final_snapshot: true
         wait: true
-        
-    - name: gather information about the rds instance
-      amazon.aws.rds_instance:
-        region: "{{ (arn | split(':'))[3] }}"
-        db_instance_identifier: "{{ identifier }}"
       register: result
       
     - copy:
