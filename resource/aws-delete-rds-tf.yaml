@@ -2,13 +2,6 @@
   hosts: localhost
   connection: local
   tasks:
-    - name: Delete previous aws rds instance snapshot by its ID
-      amazon.aws.rds_instance_snapshot:
-        db_snapshot_identifier: "{{ identifier }}"
-        region: "{{ (arn | split(':'))[3] }}"
-        state: absent
-        wait: true
-
     - name: Delete aws rds instance by its ID
       amazon.aws.rds_instance:
         db_instance_identifier: "{{ identifier }}"
