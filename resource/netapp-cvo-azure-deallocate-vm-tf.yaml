@@ -16,7 +16,7 @@
         executable: /bin/bash
     
     - name: set subscription
-      ansible.builtin.shell: az account set --subscription {{ id | regex_search('(?<=/subscriptions/)([a-fA-F0-9-]+)') }}
+      ansible.builtin.shell: az account set --subscription {{ subscription_id }}
       args:
         executable: /bin/bash
     
