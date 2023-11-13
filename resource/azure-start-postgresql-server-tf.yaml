@@ -1,4 +1,4 @@
-- name: Start PostgresSql server
+- name: Start flexible PostgresSql server
   hosts: localhost
   connection: local
   collections:
@@ -19,7 +19,7 @@
       args:
         executable: /bin/bash
     
-    - name: Start stopped PostgresSql server
+    - name: Start stopped flexible PostgresSql server
       ansible.builtin.shell: az postgres flexible-server stop --resource-group "{{ resource_group_name }}" --name "{{ name }}"
       args:
         executable: /bin/bash

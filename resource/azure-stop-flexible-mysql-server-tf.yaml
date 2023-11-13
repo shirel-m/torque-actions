@@ -19,7 +19,7 @@
       args:
         executable: /bin/bash
     
-    - name: Temporarily stop MySQL server for 7 days
+    - name: Temporarily stop MySQL flexible server for 7 days
       ansible.builtin.shell: az mysql flexible-server stop --resource-group "{{ resource_group_name }}" --name "{{ name }}"
       args:
         executable: /bin/bash

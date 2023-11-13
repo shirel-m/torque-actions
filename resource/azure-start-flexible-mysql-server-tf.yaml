@@ -1,4 +1,4 @@
-- name: Start MySQL server (Flexible)
+- name: Start flexible MySQL server
   hosts: localhost
   connection: local
   collections:
@@ -19,7 +19,7 @@
       args:
         executable: /bin/bash
     
-    - name: Start stopped MySQL server
+    - name: Start stopped MySQL flexible server
       ansible.builtin.shell: az mysql flexible-server start --resource-group "{{ resource_group_name }}" --name "{{ name }}"
       args:
         executable: /bin/bash
