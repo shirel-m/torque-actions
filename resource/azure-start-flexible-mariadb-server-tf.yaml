@@ -1,4 +1,4 @@
-- name: Stop PostgresSql server
+- name: Start MariaDB server (Flexible)
   hosts: localhost
   connection: local
   collections:
@@ -19,8 +19,8 @@
       args:
         executable: /bin/bash
     
-    - name: Temporarily stop PostgresSql server for 7 days
-      ansible.builtin.shell: az postgres flexible-server stop --resource-group "{{ resource_group_name }}" --name "{{ name }}"
+    - name: Start stopped MariaDB server
+      ansible.builtin.shell: az mariadb flexible-server start --resource-group "{{ resource_group_name }}" --name "{{ name }}"
       args:
         executable: /bin/bash
       register: result

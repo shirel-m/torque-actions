@@ -20,7 +20,7 @@
         executable: /bin/bash
     
     - name: Start stopped PostgresSql server
-      ansible.builtin.shell: az postgres flexible-server stop --name "{{ name }}" --resource-group "{{ resource_group_name }}" 
+      ansible.builtin.shell: az postgres flexible-server stop --resource-group "{{ resource_group_name }}" --name "{{ name }}"
       args:
         executable: /bin/bash
       register: result

@@ -1,4 +1,4 @@
-- name: Stop PostgresSql server
+- name: Start MySQL server (Flexible)
   hosts: localhost
   connection: local
   collections:
@@ -19,8 +19,8 @@
       args:
         executable: /bin/bash
     
-    - name: Temporarily stop PostgresSql server for 7 days
-      ansible.builtin.shell: az postgres flexible-server stop --resource-group "{{ resource_group_name }}" --name "{{ name }}"
+    - name: Start stopped MySQL server
+      ansible.builtin.shell: az mysql flexible-server start --resource-group "{{ resource_group_name }}" --name "{{ name }}"
       args:
         executable: /bin/bash
       register: result
