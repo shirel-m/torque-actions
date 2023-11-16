@@ -6,7 +6,7 @@
       amazon.aws.rds_instance:
         db_instance_identifier: "{{ identifier }}"
         region: "{{ (arn | split(':'))[3] }}"
-        state: running
+        state: started
         wait: true
         
     - name: gather information about the rds instance
