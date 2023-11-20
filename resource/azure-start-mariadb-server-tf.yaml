@@ -23,8 +23,13 @@
       ansible.builtin.shell: az mariadb server start --resource-group "{{ resource_group_name }}" --name "{{ name }}"
       args:
         executable: /bin/bash
-      register: result
     
+    - name:  gather information about the MariaDB server 
+      azure_rm_mariadbserver_info:
+        resource_group: "{{ resource_group_name }}"
+        name: "{{ name }}"
+      register: result
+
     - copy:
         content: "{{ result }}"
         dest: "qtorque_outputs.json"

@@ -23,6 +23,11 @@
       ansible.builtin.shell: az mysql server restart --resource-group "{{ resource_group_name }}" --name "{{ name }}"
       args:
         executable: /bin/bash
+
+    - name:  gather information about the MySql server 
+      azure_rm_mysqlserver_info:
+        resource_group: "{{ resource_group_name }}"
+        name: "{{ name }}"
       register: result
     
     - copy:
