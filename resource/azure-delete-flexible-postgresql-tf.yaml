@@ -1,4 +1,4 @@
-- name: Stop flexible MySQL server
+- name: Permanently delete an Azure PostgreSQL flexible instance.
   hosts: localhost
   connection: local
   collections:
@@ -6,7 +6,6 @@
   vars:
     federated_login:
       is_set: "{{ lookup('ansible.builtin.env', 'AZURE_FEDERATED_TOKEN_FILE', default=undefined) }}"
-
   tasks:
     - name: az federated login
       ansible.builtin.shell: az login --service-principal -u $AZURE_CLIENT_ID -t $AZURE_TENANT_ID --federated-token $(cat $AZURE_FEDERATED_TOKEN_FILE)
@@ -18,18 +17,13 @@
       ansible.builtin.shell: az account set --subscription {{ id | regex_search('(?<=/subscriptions/)([a-fA-F0-9-]+)') }}
       args:
         executable: /bin/bash
-    
-    - name: Temporarily stop MySQL flexible server for 7 days
-      ansible.builtin.shell: az mysql flexible-server stop --resource-group "{{ resource_group_name }}" --name "{{ name }}"
-      args:
-        executable: /bin/bash
-    
-    - name: gather the information about the MySQL flexible server
-      ansible.builtin.shell: az mysql flexible-server show --resource-group "{{ resource_group_name }}" --name "{{ name }}"
+        
+    - name: Delete an Azure PostgreSQL flexible instance by it's name.
+      ansible.builtin.shell: az mysql flexible-server db delete --resource-group "{{ resource_group_name }}" --server-name "{{ server_name }}" --database-name "{{ name }}"
       args:
         executable: /bin/bash
       register: result
     
     - copy:
         content: "{{ result }}"
-        dest: "qtorque_outputs.json"
+        dest: qtorque_outputs.json

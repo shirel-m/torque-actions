@@ -24,7 +24,7 @@
       args:
         executable: /bin/bash
     
-    - name: gather the information about the MySql flexible server
+    - name: gather the information about the MySQL flexible server
       ansible.builtin.shell: az mysql flexible-server show --resource-group "{{ resource_group_name }}" --name "{{ name }}"
       args:
         executable: /bin/bash

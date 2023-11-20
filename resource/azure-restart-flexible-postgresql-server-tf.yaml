@@ -1,4 +1,4 @@
-- name: Restart flexible PostgresSql server
+- name: Restart flexible PostgresSQL server
   hosts: localhost
   connection: local
   collections:
@@ -19,12 +19,12 @@
       args:
         executable: /bin/bash
     
-    - name: Restart flexible PostgresSql server
+    - name: Restart flexible PostgresSQL server
       ansible.builtin.shell: az postgres flexible-server restart --resource-group "{{ resource_group_name }}" --name "{{ name }}"
       args:
         executable: /bin/bash
     
-    - name: gather the information about the PostgresSql flexible server
+    - name: gather the information about the PostgresSQL flexible server
       ansible.builtin.shell: az postgres flexible-server show --resource-group "{{ resource_group_name }}" --name "{{ name }}"
       args:
         executable: /bin/bash

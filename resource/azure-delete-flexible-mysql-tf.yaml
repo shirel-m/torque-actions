@@ -1,4 +1,4 @@
-- name: Stop flexible MySQL server
+- name: Permanently delete an Azure MySQL flexible instance.
   hosts: localhost
   connection: local
   collections:
@@ -19,13 +19,8 @@
       args:
         executable: /bin/bash
     
-    - name: Temporarily stop MySQL flexible server for 7 days
-      ansible.builtin.shell: az mysql flexible-server stop --resource-group "{{ resource_group_name }}" --name "{{ name }}"
-      args:
-        executable: /bin/bash
-    
-    - name: gather the information about the MySQL flexible server
-      ansible.builtin.shell: az mysql flexible-server show --resource-group "{{ resource_group_name }}" --name "{{ name }}"
+    - name: Delete an Azure MySQL flexible instance by it's name.
+      ansible.builtin.shell: az mysql flexible-server db delete --resource-group "{{ resource_group_name }}" --server-name "{{ server_name }}" --database-name "{{ name }}"
       args:
         executable: /bin/bash
       register: result

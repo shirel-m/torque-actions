@@ -12,6 +12,11 @@
       when: federated_login.is_set is defined
       args:
         executable: /bin/bash
+    
+    - name: set subscription
+      ansible.builtin.shell: az account set --subscription {{ id | regex_search('(?<=/subscriptions/)([a-fA-F0-9-]+)') }}
+      args:
+        executable: /bin/bash
         
     - name: Delete an Azure PostgreSQL instance by it's name.
       azure_rm_postgresqldatabase:

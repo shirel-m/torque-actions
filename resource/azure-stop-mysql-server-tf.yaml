@@ -1,4 +1,4 @@
-- name: Stop MySql server
+- name: Stop MySQL server
   hosts: localhost
   connection: local
   collections:
@@ -19,12 +19,12 @@
       args:
         executable: /bin/bash
     
-    - name: Temporarily stop MySql server for 7 days
+    - name: Temporarily stop MySQL server for 7 days
       ansible.builtin.shell: az mysql server stop --resource-group "{{ resource_group_name }}" --name "{{ name }}" 
       args:
         executable: /bin/bash
     
-    - name:  gather information about the MySql server 
+    - name:  gather information about the MySQL server 
       azure_rm_mysqlserver_info:
         resource_group: "{{ resource_group_name }}"
         name: "{{ name }}"

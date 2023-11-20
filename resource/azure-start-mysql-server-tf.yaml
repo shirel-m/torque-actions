@@ -1,4 +1,4 @@
-- name: Start MySql server
+- name: Start MySQL server
   hosts: localhost
   connection: local
   collections:
@@ -19,12 +19,12 @@
       args:
         executable: /bin/bash
     
-    - name: start stopped MySql server
+    - name: start stopped MySQL server
       ansible.builtin.shell: az mysql server start --resource-group "{{ resource_group_name }}" --name "{{ name }}"
       args:
         executable: /bin/bash
     
-    - name:  gather information about the MySql server 
+    - name:  gather information about the MySQL server 
       azure_rm_mysqlserver_info:
         resource_group: "{{ resource_group_name }}"
         name: "{{ name }}"
