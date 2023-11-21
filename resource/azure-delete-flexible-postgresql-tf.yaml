@@ -19,7 +19,7 @@
         executable: /bin/bash
         
     - name: Delete an Azure PostgreSQL flexible instance by it's name.
-      ansible.builtin.shell: az mysql flexible-server db delete --resource-group "{{ resource_group_name }}" --server-name "{{ server_name }}" --database-name "{{ name }}"
+      ansible.builtin.shell: az mysql flexible-server db delete --resource-group "{{ resource_group_name }}" --server-name "{{ server_name }}" --database-name "{{ name }}" --yes
       args:
         executable: /bin/bash
       register: result
