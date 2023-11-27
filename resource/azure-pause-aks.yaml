@@ -27,7 +27,10 @@
     
     - name: Pause AKS cluster
       azure_rm_aks:
-        name: "{{ name }}" 
+        name: "{{ name }}"
+        dns_prefix: "{{ dns_prefix }}"
+        enable_rbac: "{{ enable_rbac }}"
+        kubernetes_version: "{{ kubernetes_version }}"
         resource_group: "{{ resource_group_name }}"
         agent_pool_profiles:
           - count: 1
