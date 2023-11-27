@@ -30,6 +30,7 @@
         name: "{{ name }}" 
         resource_group: "{{ resource_group_name }}"
         dns_prefix: "{{ dns_prefix }}"
+        kubernetes_version: "{{ kubernetes_version }}"
         agent_pool_profiles:
           - count: 1
             name: "{{ item.name }}"
