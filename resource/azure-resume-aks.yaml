@@ -22,9 +22,11 @@
       azure_rm_aks:
         name: "{{ name }}" 
         resource_group: "{{ resource_group_name }}"
+        dns_prefix: "{{ dns_prefix }}"
         agent_pool_profiles:
           - count: "{{ item.previous_count }}"
             name: "{{ item.name }}"
+            vm_size: "{{ item.vm_size }}"
       loop: "{{ default_node_pool }}"
       register: result
     
