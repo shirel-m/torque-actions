@@ -30,8 +30,8 @@
         name: "{{ name }}" 
         resource_group: "{{ resource_group_name }}"
         agent_pool_profiles:
-          count: 1
-          name: "{{ item.name }}"
+          - count: 1
+            name: "{{ item.name }}"
       loop: "{{ default_node_pool }}"
     
     - copy:
