@@ -23,8 +23,9 @@
         name: "{{ name }}" 
         resource_group: "{{ resource_group_name }}"
         agent_pool_profiles:
-          count: "{{ previous_node_count }}"
-          name: "{{ default_node_pool[0].name }}"
+          count: "{{ item.previous_count }}"
+          name: "{{ item.name }}"
+      loop: "{{ default_node_pool }}"
       register: result
     
     - copy:
