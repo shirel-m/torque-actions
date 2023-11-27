@@ -26,17 +26,9 @@
 
     
     - name: Pause AKS cluster
-      azure_rm_aks:
-        name: "{{ name }}"
-        dns_prefix: "{{ dns_prefix }}"
-        enable_rbac: "{{ role_based_access_control_enabled }}"
-        kubernetes_version: "{{ kubernetes_version }}"
-        resource_group: "{{ resource_group_name }}"
-        agent_pool_profiles:
-          - count: 1
-            name: "{{ item.name }}"
-            vm_size: "{{ item.vm_size }}"
-        state: present
+      ansible.builtin.shell: az aks scale --resource-group "{{ resource_group_name }}" --name "{{ name }}" --node-count 1 --nodepool-name "{{ item.name }}"
+      args:
+        executable: /bin/bash
       loop: "{{ default_node_pool }}"
     
     - copy:
