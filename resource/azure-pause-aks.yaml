@@ -19,7 +19,7 @@
         executable: /bin/bash
     
     - name: Get information about an AKS cluster
-      azure_rm_aks:
+      azure_rm_aks_info:
         name: "{{ name }}" 
         resource_group: "{{ resource_group_name }}"
       register: result
