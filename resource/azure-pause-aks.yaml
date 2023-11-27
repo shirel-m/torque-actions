@@ -31,7 +31,7 @@
         resource_group: "{{ resource_group_name }}"
         agent_pool_profiles:
           count: 1
-          name: "{{ default_node_pool[0].name }}"
+          name: "{{ default_node_pool.0.name }}"
     
     - copy:
         content: "{{ result }}"
