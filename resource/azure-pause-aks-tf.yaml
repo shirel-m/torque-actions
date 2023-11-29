@@ -1,0 +1,36 @@
+- name: Pause AKS cluster
+  hosts: localhost
+  connection: local
+  collections:
+    - azure.azcollection
+  vars:
+    federated_login:
+      is_set: "{{ lookup('ansible.builtin.env', 'AZURE_FEDERATED_TOKEN_FILE', default=undefined) }}"
+  tasks:
+    - name: az federated login
+      ansible.builtin.shell: az login --service-principal -u $AZURE_CLIENT_ID -t $AZURE_TENANT_ID --federated-token $(cat $AZURE_FEDERATED_TOKEN_FILE)
+      when: federated_login.is_set is defined
+      args:
+        executable: /bin/bash
+        
+    - name: set subscription
+      ansible.builtin.shell: az account set --subscription {{ id | regex_search('(?<=/subscriptions/)([a-fA-F0-9-]+)') }}
+      args:
+        executable: /bin/bash
+    
+    - name: Get information about an AKS cluster
+      azure_rm_aks_info:
+        name: "{{ name }}" 
+        resource_group: "{{ resource_group_name }}"
+      register: result
+
+    
+    - name: Pause AKS cluster
+      ansible.builtin.shell: az aks scale --resource-group "{{ resource_group_name }}" --name "{{ name }}" --node-count 1 --nodepool-name "{{ item.name }}"
+      args:
+        executable: /bin/bash
+      loop: "{{ default_node_pool }}"
+    
+    - copy:
+        content: "{{ result }}"
+        dest: "qtorque_outputs.json"
