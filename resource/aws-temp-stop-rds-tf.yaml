@@ -7,7 +7,8 @@
         db_instance_identifier: "{{ identifier }}"
         region: "{{ (arn | split(':'))[3] }}"
         state: stopped
-        poll: 0
+        wait: false
+      poll: 0
         
     - name: gather information about the rds instance
       amazon.aws.rds_instance:
