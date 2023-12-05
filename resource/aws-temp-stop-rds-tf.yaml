@@ -15,7 +15,9 @@
         region: "{{ (arn | split(':'))[3] }}"
         db_instance_identifier: "{{ identifier }}"
       register: result
-      until: result.db_instance_status == 'Stopped'
+      until: result.db_instance_status == 'stopped'
+      retries: 20
+      delay: 30
       
     - copy:
         content: "{{ result }}"

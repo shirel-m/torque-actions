@@ -7,13 +7,17 @@
         db_instance_identifier: "{{ identifier }}"
         region: "{{ (arn | split(':'))[3] }}"
         state: started
-        wait: true
+        wait: false
+      poll: 0
         
     - name: gather information about the rds instance
       amazon.aws.rds_instance:
         region: "{{ (arn | split(':'))[3] }}"
         db_instance_identifier: "{{ identifier }}"
       register: result
+      until: result.db_instance_status == 'available'
+      retries: 20
+      delay: 30
       
     - copy:
         content: "{{ result }}"
