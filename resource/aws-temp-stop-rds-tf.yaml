@@ -7,13 +7,14 @@
         db_instance_identifier: "{{ identifier }}"
         region: "{{ (arn | split(':'))[3] }}"
         state: stopped
-        wait: true
+        poll: 0
         
     - name: gather information about the rds instance
       amazon.aws.rds_instance:
         region: "{{ (arn | split(':'))[3] }}"
         db_instance_identifier: "{{ identifier }}"
       register: result
+      until: result.db_instance_status == 'Stopped'
       
     - copy:
         content: "{{ result }}"
