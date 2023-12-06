@@ -18,7 +18,8 @@
       until: result.db_instance_status == 'stopped'
       retries: 20
       delay: 30
-      debugger: always
+      loop_control:
+        label: result.db_instance_status
       
     - copy:
         content: "{{ result }}"
