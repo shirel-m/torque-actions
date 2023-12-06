@@ -19,7 +19,15 @@
       retries: 20
       delay: 30
       loop_control:
-        label: result.db_instance_status
+        loop_var: gather_loop
+        label: "Current status {{ result.db_instance_status }}"
+      
+    - name: Display logs
+      debug:
+        msg: "Attempt {{gather_loop.retry_num}}"
+        verbosity: 3
+      loop_control:
+        label: "Checking..."
       
     - copy:
         content: "{{ result }}"
