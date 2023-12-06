@@ -15,19 +15,11 @@
         region: "{{ (arn | split(':'))[3] }}"
         db_instance_identifier: "{{ identifier }}"
       register: result
-      until: result.db_instance_status == 'stopped'
-      retries: 20
-      delay: 30
+      loop: "{{ range(20) }}"
+      when: result.db_instance_status != 'stopped'
       loop_control:
-        loop_var: gather_loop
         label: "Current status {{ result.db_instance_status }}"
-      
-    - name: Display logs
-      debug:
-        msg: "Attempt {{gather_loop.retry_num}}"
-        verbosity: 3
-      loop_control:
-        label: "Checking..."
+        pause: 30
       
     - copy:
         content: "{{ result }}"
