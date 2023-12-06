@@ -1,0 +1,24 @@
+- name: Start AWS RDS instance 
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: start aws rds instance by its ID
+      amazon.aws.rds_instance:
+        db_instance_identifier: "{{ DBInstanceIdentifier }}"
+        state: started
+        wait: false
+      poll: 0
+        
+    - name: gather information about the rds instance
+      amazon.aws.rds_instance:
+        db_instance_identifier: "{{ DBInstanceIdentifier }}"
+      register: result
+      loop: "{{ range(20) }}"
+      when: result.db_instance_status != 'available'
+      loop_control:
+        label: "Current status {{ result.db_instance_status }}"
+        pause: 30
+      
+    - copy:
+        content: "{{ result }}"
+        dest: qtorque_outputs.json
