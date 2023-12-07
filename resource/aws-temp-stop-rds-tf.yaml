@@ -23,7 +23,7 @@
       with_sequence: start=0 end=100
 
 
-    - debug: msg={{ result.db_instance_status }}
+    - debug: msg={{ result }}
       
     - copy:
         content: "{{ result }}"
