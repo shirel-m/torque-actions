@@ -15,11 +15,15 @@
         region: "{{ (arn | split(':'))[3] }}"
         db_instance_identifier: "{{ identifier }}"
       register: result
-      loop: "{{ range(20) }}"
-      when: result.db_instance_status != 'stopped'
+      until: result.db_instance_status != 'stopped'
+      retries: 20
+      delay: 30
       loop_control:
-        label: "Current status {{ result.db_instance_status }}"
-        pause: 30
+        label: "Retry {{ item }}"
+      with_sequence: start=0 end=20
+
+
+    - debug: msg={{UPTIME_POST_REBOOT.stdout}}
       
     - copy:
         content: "{{ result }}"
