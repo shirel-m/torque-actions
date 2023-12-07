@@ -6,15 +6,24 @@
       amazon.aws.rds_instance:
         db_instance_identifier: "{{ identifier }}"
         region: "{{ (arn | split(':'))[3] }}"
-        state: stopped
-        wait: true
+        state: started
+        wait: false
+      poll: 0
     
     - name: gather information about the rds instance
       amazon.aws.rds_instance:
         region: "{{ (arn | split(':'))[3] }}"
         db_instance_identifier: "{{ identifier }}"
-      register: result
+      register: db_instance_state
+
+    - name: wait until started
+      amazon.aws.rds_instance:
+        region: "{{ (arn | split(':'))[3] }}"
+        db_instance_identifier: "{{ identifier }}"
+      register: db_instance_state
+      when: db_instance_state.db_instance_status != 'available'
+         
       
     - copy:
-        content: "{{ result }}"
+        content: "{{ db_instance_state }}"
         dest: qtorque_outputs.json
