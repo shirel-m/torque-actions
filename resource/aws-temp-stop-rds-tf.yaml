@@ -14,17 +14,15 @@
       amazon.aws.rds_instance:
         region: "{{ (arn | split(':'))[3] }}"
         db_instance_identifier: "{{ identifier }}"
-      register: result
+      register: db_instance_state
 
     - name: wait until stopped
       amazon.aws.rds_instance:
         region: "{{ (arn | split(':'))[3] }}"
         db_instance_identifier: "{{ identifier }}"
-      register: new_result
-      set_fact:
-        result={{new_result}}
-      when: result.db_instance_status != 'stopped'   
+      register: db_instance_state
+      when: db_instance_state.db_instance_status != 'stopped'   
       
     - copy:
-        content: "{{ result }}"
+        content: "{{ db_instance_state }}"
         dest: qtorque_outputs.json
