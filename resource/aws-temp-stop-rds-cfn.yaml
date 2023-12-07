@@ -6,18 +6,12 @@
       amazon.aws.rds_instance:
         db_instance_identifier: "{{ DBInstanceIdentifier }}"
         state: stopped
-        wait: false
-      poll: 0
+        wait: true
         
     - name: gather information about the rds instance
       amazon.aws.rds_instance:
         db_instance_identifier: "{{ DBInstanceIdentifier }}"
       register: result
-      loop: "{{ range(20) }}"
-      when: result.db_instance_status != 'stopped'
-      loop_control:
-        label: "Current status {{ result.db_instance_status }}"
-        pause: 30
       
     - copy:
         content: "{{ result }}"
