@@ -20,10 +20,10 @@
       delay: 30
       loop_control:
         label: "Retry {{ item }}"
-      with_sequence: start=0 end=20
+      with_sequence: start=0 end=100
 
 
-    - debug: msg={{UPTIME_POST_REBOOT.stdout}}
+    - debug: msg={{ result.db_instance_status }}
       
     - copy:
         content: "{{ result }}"
