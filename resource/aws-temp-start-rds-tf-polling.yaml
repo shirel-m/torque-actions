@@ -15,18 +15,12 @@
         region: "{{ (arn | split(':'))[3] }}"
         db_instance_identifier: "{{ identifier }}"
       register: result
-
-    - name: wait until available
-      amazon.aws.rds_instance:
-        region: "{{ (arn | split(':'))[3] }}"
-        db_instance_identifier: "{{ identifier }}"
-      register: result
       with_sequence: 0-50
       loop_control:
         label: "DB status {{ result.db_instance_status }}. Retrying..."
         pause: 20
       changed_when: result.db_instance_status == 'available'
-      #when: not result.changed
+      when: result is not defined or (result is defined and not result.changed)
       
     - copy:
         content: "{{ result }}"
