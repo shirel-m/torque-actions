@@ -21,12 +21,12 @@
         region: "{{ (arn | split(':'))[3] }}"
         db_instance_identifier: "{{ identifier }}"
       register: result
-      when: not result.changed
       with_sequence: 0-50
       loop_control:
-        label: "{{ result | json_query('db_instance_status') }}"
+        label: "Database is stopping. Retrying..."
         pause: 20
       changed_when: result.db_instance_status == 'stopped'
+      when: not result.changed
       
     - copy:
         content: "{{ result }}"
