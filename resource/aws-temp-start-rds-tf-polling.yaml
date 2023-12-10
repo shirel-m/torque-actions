@@ -21,12 +21,12 @@
         region: "{{ (arn | split(':'))[3] }}"
         db_instance_identifier: "{{ identifier }}"
       register: result
-      with_sequence: 0-50
       loop_control:
-        label: "Database {{ identifier }} is {{ result.db_instance_status }}. Retrying..."
+        label: "DB is starting. Retrying..."
         pause: 20
       failed_when: result.db_instance_status == 'available'
       ignore_errors: true
+      with_sequence: 0-50
     
     - copy:
         content: "{{ result }}"

@@ -21,13 +21,13 @@
         region: "{{ (arn | split(':'))[3] }}"
         db_instance_identifier: "{{ identifier }}"
       register: result
-      with_sequence: 0-50
       loop_control:
-        label: "Database {{ identifier }} is {{ result.db_instance_status }}. Retrying..."
+        label: "DB is stopping. Retrying..."
         pause: 20
       failed_when: result.db_instance_status == 'stopped'
       ignore_errors: true
-      
+      with_sequence: 0-50
+
     - copy:
         content: "{{ result }}"
         dest: qtorque_outputs.json
