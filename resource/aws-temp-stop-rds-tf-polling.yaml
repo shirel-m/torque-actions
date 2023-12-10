@@ -15,12 +15,18 @@
         region: "{{ (arn | split(':'))[3] }}"
         db_instance_identifier: "{{ identifier }}"
       register: result
+
+    - name: wait until stopped
+      amazon.aws.rds_instance:
+        region: "{{ (arn | split(':'))[3] }}"
+        db_instance_identifier: "{{ identifier }}"
+      register: result
+      when: not result.changed
       with_sequence: 0-50
       loop_control:
-        label: "{{ result.db_instance_status }}"
+        label: "DB status {{ result.db_instance_status }}. Retrying..."
         pause: 20
       changed_when: result.db_instance_status == 'stopped'
-      when: result is not defined or (result is defined and not result.changed)
       
     - copy:
         content: "{{ result }}"
