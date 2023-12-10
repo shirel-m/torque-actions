@@ -9,25 +9,19 @@
         state: started
         wait: false
       poll: 0
-    
+
     - name: gather information about the rds instance
       amazon.aws.rds_instance:
         region: "{{ (arn | split(':'))[3] }}"
         db_instance_identifier: "{{ identifier }}"
-      register: db_instance_state
-
-    - name: wait until started
-      amazon.aws.rds_instance:
-        region: "{{ (arn | split(':'))[3] }}"
-        db_instance_identifier: "{{ identifier }}"
-      register: db_instance_state
+      register: result
       with_sequence: 0-50
       loop_control:
-        label: "DB status {{ db_instance_state }}. Retrying..."
+        label: "DB status {{ result.db_instance_status }}. Retrying..."
         pause: 20
-      changed_when: db_instance_state.db_instance_status == 'available'
-         
+      changed_when: result.db_instance_status == 'available'
+      when: not result.changed
       
     - copy:
-        content: "{{ db_instance_state }}"
+        content: "{{ result }}"
         dest: qtorque_outputs.json
