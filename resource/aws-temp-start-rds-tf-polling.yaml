@@ -29,5 +29,5 @@
       ignore_errors: true
 
     - copy:
-      content: "{{ result }}"
-      dest: qtorque_outputs.json
+        content: "{{ result }}"
+        dest: qtorque_outputs.json
