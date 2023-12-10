@@ -1,9 +1,6 @@
-- name: Start Aws RDS 
+- name: Start AWS RDS instance
   hosts: localhost
   connection: local
-  vars:
-    result:
-
   tasks:
     - name: start aws rds instance by its ID
       amazon.aws.rds_instance:
@@ -14,6 +11,12 @@
       poll: 0
 
     - name: gather information about the rds instance
+      amazon.aws.rds_instance:
+        region: "{{ (arn | split(':'))[3] }}"
+        db_instance_identifier: "{{ identifier }}"
+      register: result
+
+    - name: wait until available
       amazon.aws.rds_instance:
         region: "{{ (arn | split(':'))[3] }}"
         db_instance_identifier: "{{ identifier }}"
