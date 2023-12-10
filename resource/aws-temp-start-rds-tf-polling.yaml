@@ -1,6 +1,9 @@
 - name: Start Aws RDS 
   hosts: localhost
   connection: local
+  vars:
+    result:
+
   tasks:
     - name: start aws rds instance by its ID
       amazon.aws.rds_instance:
