@@ -17,19 +17,20 @@
       register: result
 
     - name: wait until stopped
-      amazon.aws.rds_instance:
-        region: "{{ (arn | split(':'))[3] }}"
-        db_instance_identifier: "{{ identifier }}"
-      register: result
-      loop_control:
-        label: "DB is stopping. Retrying..."
-        pause: 20
-      failed_when: result.db_instance_status == 'stopped'
-      ignore_errors: true
-      with_sequence: 0-50
-
-    - copy:
-        content: "{{ result }}"
-        dest: qtorque_outputs.json
+      block:
+        - name: check aws rds status
+          amazon.aws.rds_instance:
+            region: "{{ (arn | split(':'))[3] }}"
+            db_instance_identifier: "{{ identifier }}"
+          register: result
+          loop_control:
+            label: "DB is stopping. Retrying..."
+            pause: 20
+          failed_when: result.db_instance_status == 'stopped'
+          with_sequence: 0-50
+      resque:
+        - copy:
+            content: "{{ result }}"
+            dest: qtorque_outputs.json
       
     
