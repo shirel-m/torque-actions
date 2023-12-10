@@ -1,8 +1,8 @@
-- name: Stop Aws RDS 
+- name: Start Aws RDS 
   hosts: localhost
   connection: local
   tasks:
-    - name: stop aws rds instance by its ID
+    - name: start aws rds instance by its ID
       amazon.aws.rds_instance:
         db_instance_identifier: "{{ identifier }}"
         region: "{{ (arn | split(':'))[3] }}"
@@ -15,11 +15,11 @@
         region: "{{ (arn | split(':'))[3] }}"
         db_instance_identifier: "{{ identifier }}"
       register: result
-      with_sequence: 0-50
+      changed_when: result.db_instance_status == 'available'
       loop_control:
         label: "DB status {{ result.db_instance_status }}. Retrying..."
         pause: 20
-      changed_when: result.db_instance_status == 'available'
+      with_sequence: 0-50
       when: not result.changed
       
     - copy:

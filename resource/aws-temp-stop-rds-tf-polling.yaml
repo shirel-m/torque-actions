@@ -10,16 +10,16 @@
         wait: false
       poll: 0
 
-    - name: wait until stopped
+    - name: gather information about the rds instance
       amazon.aws.rds_instance:
         region: "{{ (arn | split(':'))[3] }}"
         db_instance_identifier: "{{ identifier }}"
       register: result
-      with_sequence: 0-50
+      changed_when: result.db_instance_status == 'stopped'
       loop_control:
         label: "DB status {{ result.db_instance_status }}. Retrying..."
         pause: 20
-      changed_when: result.db_instance_status == 'stopped'
+      with_sequence: 0-50
       when: not result.changed
       
     - copy:
