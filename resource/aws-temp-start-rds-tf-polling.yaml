@@ -17,18 +17,17 @@
       register: result
 
     - name: wait until started
-      block:
-        - name: check status
-          amazon.aws.rds_instance:
-            region: "{{ (arn | split(':'))[3] }}"
-            db_instance_identifier: "{{ identifier }}"
-          register: result
-          with_sequence: 0-50
-          loop_control:
-            label: "Database is starting. Retrying..."
-            pause: 20
-          failed_when: result.db_instance_status == 'available'
-      resque:
-        - copy:
-            content: "{{ result }}"
-            dest: qtorque_outputs.json
+      amazon.aws.rds_instance:
+        region: "{{ (arn | split(':'))[3] }}"
+        db_instance_identifier: "{{ identifier }}"
+      register: result
+      with_sequence: 0-50
+      loop_control:
+        label: "Database {{ identifier }} is {{ result.db_instance_status }}. Retrying..."
+        pause: 20
+      failed_when: result.db_instance_status == 'available'
+      ignore_errors: true
+
+    - copy:
+      content: "{{ result }}"
+      dest: qtorque_outputs.json
