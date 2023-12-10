@@ -28,7 +28,6 @@
             label: "Database is stopping. Retrying..."
             pause: 20
           failed_when: result.db_instance_status == 'stopped'
-
       resque:
         - copy:
           content: "{{ result }}"
