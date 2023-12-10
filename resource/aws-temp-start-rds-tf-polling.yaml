@@ -17,7 +17,7 @@
       register: result
       with_sequence: 0-50
       loop_control:
-        label: "{{ item.db_instance_status }}"
+        label: "{{ result.db_instance_status }}"
         pause: 20
       changed_when: result.db_instance_status == 'available'
       when: result is not defined or (result is defined and not result.changed)
