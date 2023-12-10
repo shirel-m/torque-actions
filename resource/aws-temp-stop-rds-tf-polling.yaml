@@ -15,7 +15,7 @@
         region: "{{ (arn | split(':'))[3] }}"
         db_instance_identifier: "{{ identifier }}"
       register: result
-
+      
     - name: wait until stopped
       block:
         - name: check aws rds status
@@ -28,7 +28,7 @@
             pause: 20
           failed_when: result.db_instance_status == 'stopped'
           with_sequence: 0-50
-      resque:
+      rescue:
         - copy:
             content: "{{ result }}"
             dest: qtorque_outputs.json

@@ -28,7 +28,7 @@
             pause: 20
           failed_when: result.db_instance_status == 'available'
           with_sequence: 0-50
-      resque:
+      rescue:
         - copy:
             content: "{{ result }}"
             dest: qtorque_outputs.json
