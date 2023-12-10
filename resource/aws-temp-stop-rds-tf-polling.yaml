@@ -21,8 +21,11 @@
         region: "{{ (arn | split(':'))[3] }}"
         db_instance_identifier: "{{ identifier }}"
       register: db_instance_state
-      when: db_instance_state.db_instance_status != 'stopped'
-         
+      with_sequence: 0-50
+      loop_control:
+        label: "DB status {{ db_instance_state }}. Retrying..."
+        pause: 20
+      changed_when: db_instance_state.db_instance_status == 'stopped'         
       
     - copy:
         content: "{{ db_instance_state }}"
