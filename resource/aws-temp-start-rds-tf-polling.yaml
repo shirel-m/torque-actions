@@ -24,7 +24,7 @@
       when: not result.changed
       with_sequence: 0-50
       loop_control:
-        label: "DB status {{ result.db_instance_status }}. Retrying..."
+        label: "{{ result | json_query('db_instance_status') }}"
         pause: 20
       changed_when: result.db_instance_status == 'available'
       
