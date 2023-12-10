@@ -26,7 +26,7 @@
         label: "DB status {{ result.db_instance_status }}. Retrying..."
         pause: 20
       changed_when: result.db_instance_status == 'stopped'
-      when: not result.changed
+      #when: not result.changed
       
     - copy:
         content: "{{ result }}"
