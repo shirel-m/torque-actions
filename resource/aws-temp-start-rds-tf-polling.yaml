@@ -15,12 +15,11 @@
         region: "{{ (arn | split(':'))[3] }}"
         db_instance_identifier: "{{ identifier }}"
       register: result
-      loop: "{{ range(0, 30) | list }}"
+      loop: "{{ range(1, 40) }}"
       loop_control:
         label: "DB status {{ result.db_instance_status }}. Retrying..."
-        pause: 20
-      #changed_when: result.db_instance_status == 'available'
-      #when: not result.changed
+        loop_var: result
+        pause: 10
 
     - copy:
         content: "{{ result }}"
