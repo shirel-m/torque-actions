@@ -10,11 +10,11 @@
         wait: false
       poll: 0
     
-    - name: gather information about the rds instance
-      amazon.aws.rds_instance:
-        region: "{{ (arn | split(':'))[3] }}"
-        db_instance_identifier: "{{ identifier }}"
-      register: result
+    # - name: gather information about the rds instance
+    #   amazon.aws.rds_instance:
+    #     region: "{{ (arn | split(':'))[3] }}"
+    #     db_instance_identifier: "{{ identifier }}"
+    #   register: result
 
     - name: check aws rds status
       amazon.aws.rds_instance:
@@ -23,9 +23,10 @@
       register: result
       with_sequence: 0-30
       loop_control:
-        label: "DB is starting. Retrying..."
+        label: "DB status {{ result.db_instance_status }}. Retrying..."
         pause: 20
       changed_when: result.db_instance_status == 'available'
+      #when: not result.changed
 
     - copy:
         content: "{{ result }}"
