@@ -15,7 +15,7 @@
         region: "{{ (arn | split(':'))[3] }}"
         db_instance_identifier: "{{ identifier }}"
       register: result
-      with_sequence: 0-30
+      loop: "{{ range(0, 30) | list }}"
       loop_control:
         label: "DB status {{ result.db_instance_status }}. Retrying..."
         pause: 20
