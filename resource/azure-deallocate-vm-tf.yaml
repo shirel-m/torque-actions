@@ -18,12 +18,25 @@
       args:
         executable: /bin/bash
     
-    - name: Deallocate virtual machine
-      azure_rm_virtualmachine:
-        resource_group: "{{ resource_group_name }}"
-        name: "{{ name }}"
-        allocated: no
-      register: result
+    - name: try deallocate virtual machine
+      block:     
+        - name: Deallocate virtual machine
+          azure_rm_virtualmachine:
+            resource_group: "{{ resource_group_name }}"
+            name: "{{ name }}"
+            allocated: no
+          register: result
+      rescue:
+        - name: Deallocate virtual machine using cli
+          ansible.builtin.shell: az vm deallocate -g {{ resource_group_name }} -n {{ name }}
+          args:
+            executable: /bin/bash
+          register: result
+        - name: Get details
+          azure_rm_virtualmachine:
+            resource_group: "{{ resource_group_name }}"
+            name: "{{ name }}"
+          register: result
 
     - copy:
         content: "{{ result }}"
