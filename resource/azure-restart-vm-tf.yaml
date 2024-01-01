@@ -17,13 +17,26 @@
       ansible.builtin.shell: az account set --subscription {{ id | regex_search('(?<=/subscriptions/)([a-fA-F0-9-]+)') }}
       args:
         executable: /bin/bash
-    
-    - name: Restart virtual machine
-      azure_rm_virtualmachine:
-        resource_group: "{{ resource_group_name }}"
-        name: "{{ name }}"
-        restarted: yes
-      register: result
+
+    - name: try restart virtual machine
+      block:     
+        - name: Restart virtual machine
+          azure_rm_virtualmachine:
+            resource_group: "{{ resource_group_name }}"
+            name: "{{ name }}"
+            restarted: yes
+          register: result
+      rescue:
+        - name: Restart virtual machine using cli
+          ansible.builtin.shell: az vm restart -g {{ resource_group_name }} -n {{ name }}
+          args:
+            executable: /bin/bash
+          register: result
+        - name: Get details
+          azure_rm_virtualmachine:
+            resource_group: "{{ resource_group_name }}"
+            name: "{{ name }}"
+          register: result
 
     - copy:
         content: "{{ result }}"
