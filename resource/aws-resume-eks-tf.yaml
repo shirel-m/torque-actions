@@ -1,0 +1,20 @@
+- name: Resume EKS cluster
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: Get EKS cluster node groups
+      ansible.builtin.shell: aws eks list-nodegroups --cluster-name="{{ name }}"
+      args:
+        executable: /bin/bash
+      register: node_groups_result
+
+    - name: Resume paused EKS cluster
+      ansible.builtin.shell: eksctl scale nodegroup --cluster="{{ name }}" --nodes="{{ nodes_count }}" --name="{{ item }}" --wait
+      args:
+        executable: /bin/bash
+      loop: "{{ node_groups_result.nodegroups }}"
+      register: result
+    
+    - copy:
+        content: "{{ result }}"
+        dest: "qtorque_outputs.json"
