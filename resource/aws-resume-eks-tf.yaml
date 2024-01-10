@@ -7,12 +7,14 @@
       args:
         executable: /bin/bash
       register: node_groups_result
+    
+    - debug: var=node_groups_result
 
     - name: Resume paused EKS cluster
       ansible.builtin.shell: eksctl scale nodegroup --cluster="{{ name }}" --nodes="{{ nodes_count }}" --name="{{ item }}" --wait
       args:
         executable: /bin/bash
-      loop: "{{ node_groups_result['nodegroups'] }}"
+      loop: "{{ node_groups_result.stdout['nodegroups'] }}"
       register: result
     
     - copy:

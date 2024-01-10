@@ -7,18 +7,20 @@
       args:
         executable: /bin/bash
       register: node_groups_result
+    
+    - debug: var=node_groups_result
 
     - name: Drain EKS cluster node groups
       ansible.builtin.shell: eksctl drain nodegroup --cluster="{{ name }}" --name="{{ item }}"
       args:
         executable: /bin/bash
-      loop: "{{ node_groups_result['nodegroups'] }}"
+      loop: "{{ node_groups_result.stdout['nodegroups'] }}"
 
     - name: Pause EKS cluster
       ansible.builtin.shell: eksctl scale nodegroup --cluster="{{ name }}" --nodes=1 --name="{{ item }}"
       args:
         executable: /bin/bash
-      loop: "{{ node_groups_result['nodegroups'] }}"
+      loop: "{{ node_groups_result.stdout['nodegroups'] }}"
       register: result
     
     - copy:
