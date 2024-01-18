@@ -11,7 +11,7 @@
     - debug: var=node_groups_result
 
     - name: Drain EKS cluster node groups
-      ansible.builtin.shell: eksctl drain nodegroup --cluster="{{ name }}" --name="{{ item }}"
+      ansible.builtin.shell: eksctl drain nodegroup --cluster="{{ name }}" --name="{{ item }}" --approve
       args:
         executable: /bin/bash
       loop: "{{ node_groups_result.stdout|from_json|json_query('nodegroups') }}"
