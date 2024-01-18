@@ -14,13 +14,13 @@
       ansible.builtin.shell: eksctl drain nodegroup --cluster="{{ name }}" --name="{{ item }}"
       args:
         executable: /bin/bash
-      loop: "{{ node_groups_result.stdout['nodegroups'] }}"
+      loop: "{{ node_groups_result.stdout|from_json|json_query('nodegroups') }}"
 
     - name: Pause EKS cluster
       ansible.builtin.shell: eksctl scale nodegroup --cluster="{{ name }}" --nodes=1 --name="{{ item }}"
       args:
         executable: /bin/bash
-      loop: "{{ node_groups_result.stdout['nodegroups'] }}"
+      loop: "{{ node_groups_result.stdout|from_json|json_query('nodegroups') }}"
       register: result
     
     - copy:
