@@ -11,13 +11,13 @@
     - debug: var=node_groups_result
 
     - name: Drain EKS cluster node groups
-      ansible.builtin.shell: eksctl drain nodegroup --cluster="{{ name }}" --name="{{ item }}" --approve
+      ansible.builtin.shell: eksctl drain nodegroup --cluster="{{ name }}" --name="{{ item }}" --cfn-role-arn="{{ role_arn }}"
       args:
         executable: /bin/bash
       loop: "{{ node_groups_result.stdout|from_json|json_query('nodegroups') }}"
 
     - name: Pause EKS cluster
-      ansible.builtin.shell: eksctl scale nodegroup --cluster="{{ name }}" --nodes=1 --name="{{ item }}"
+      ansible.builtin.shell: eksctl scale nodegroup --cluster="{{ name }}" --nodes=1 --name="{{ item }}" --cfn-role-arn="{{ role_arn }}"
       args:
         executable: /bin/bash
       loop: "{{ node_groups_result.stdout|from_json|json_query('nodegroups') }}"
