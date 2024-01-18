@@ -7,8 +7,6 @@
       args:
         executable: /bin/bash
       register: node_groups_result
-    
-    - debug: var=node_groups_result
 
     - name: Drain EKS cluster node groups
       ansible.builtin.shell: eksctl drain nodegroup --cluster="{{ name }}" --name="{{ item }}" --cfn-role-arn="{{ role_arn }}"
