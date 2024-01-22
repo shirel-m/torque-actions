@@ -11,7 +11,7 @@
     - debug: var=node_groups_result
 
     - name: Resume paused EKS cluster
-      ansible.builtin.shell: aws eks describe-nodegroup --cluster="{{ name }}" --nodegroup-name="{{ item }}" | eksctl scale nodegroup --cluster="{{ name }}" --nodes="{{ item + '_size' }}" --name="{{ item }}"
+      ansible.builtin.shell: aws eks describe-nodegroup --cluster="{{ name }}" --nodegroup-name="{{ item }}" | eksctl scale nodegroup --cluster="{{ name }}" --nodes="{{ lookup('vars', item + '_size') }}" --name="{{ item }}"
       args:
         executable: /bin/bash
       loop: "{{ node_groups_result.stdout|from_json|json_query('nodegroups') }}"
