@@ -7,8 +7,6 @@
       args:
         executable: /bin/bash
       register: node_groups_result
-    
-    - debug: var=node_groups_result
 
     - name: Resume paused EKS cluster
       ansible.builtin.shell: aws eks describe-nodegroup --cluster="{{ name }}" --nodegroup-name="{{ item }}" | eksctl scale nodegroup --cluster="{{ name }}" --nodes="{{ lookup('vars', item + '_size') }}" --name="{{ item }}"
