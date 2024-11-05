@@ -7,14 +7,15 @@
     federated_login:
       is_set: "{{ lookup('ansible.builtin.env', 'AZURE_FEDERATED_TOKEN_FILE', default=undefined) }}"
   tasks:
-    - name: Display all variables/facts known for a host
-      debug:
-        var: hostvars[inventory_hostname]
-      tags: debug_info
-
     - name: az federated login
       ansible.builtin.shell: az login --service-principal -u $AZURE_CLIENT_ID -t $AZURE_TENANT_ID --federated-token $(cat $AZURE_FEDERATED_TOKEN_FILE)
       when: federated_login.is_set is defined
+      args:
+        executable: /bin/bash
+
+    - name: az login
+      ansible.builtin.shell: az login --service-principal --tenant $AZURE_TENANT --username $AZURE_CLIENT_ID --password $AZURE_SECRET
+      when: federated_login.is_set is undefined
       args:
         executable: /bin/bash
 
