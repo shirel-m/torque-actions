@@ -13,14 +13,9 @@
       args:
         executable: /bin/bash
 
-    - name: az login
-      ansible.builtin.shell: az login --service-principal --tenant $AZURE_TENANT --username $AZURE_CLIENT_ID --password $AZURE_SECRET
-      when: federated_login.is_set is undefined
-      args:
-        executable: /bin/bash
-
     - name: set subscription
       ansible.builtin.shell: az account set --subscription {{ id | regex_search('(?<=/subscriptions/)([a-fA-F0-9-]+)') }}
+      when: federated_login.is_set is defined
       args:
         executable: /bin/bash
 
