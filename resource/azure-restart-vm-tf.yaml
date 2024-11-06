@@ -15,7 +15,6 @@
 
     - name: set subscription
       ansible.builtin.shell: az account set --subscription {{ id | regex_search('(?<=/subscriptions/)([a-fA-F0-9-]+)') }}
-      when: federated_login.is_set is defined
       args:
         executable: /bin/bash
 
