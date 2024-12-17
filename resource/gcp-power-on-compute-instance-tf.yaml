@@ -14,18 +14,18 @@
         auth_kind: serviceaccount
         service_account_file: "{{ service_account_file }}"
         project: "{{ project }}"
-        zone: "{{ vm_zone }}"
-        name: "{{ vm_name }}"
+        zone: "{{ zone }}"
+        name: "{{ name }}"
         status: RUNNING
         
     - name: gather information about the vm instance
       google.cloud.gcp_compute_instance_info:
         auth_kind: serviceaccount
         service_account_file: "{{ service_account_file }}"
-        project: "{{ project_id }}"
-        zone: "{{ vm_zone }}"
+        project: "{{ project }}"
+        zone: "{{ zone }}"
         filters:
-          - "name={{ vm_name }}"
+          - "name={{ vname }}"
       register: vm_info
       
     - copy:
