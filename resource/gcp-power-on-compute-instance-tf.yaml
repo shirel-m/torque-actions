@@ -25,7 +25,7 @@
         project: "{{ project }}"
         zone: "{{ zone }}"
         filters:
-          - "name={{ vname }}"
+          - "name={{ name }}"
       register: vm_info
       
     - copy:
