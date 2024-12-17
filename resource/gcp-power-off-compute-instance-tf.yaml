@@ -13,7 +13,7 @@
       google.cloud.gcp_compute_instance:
         auth_kind: serviceaccount
         service_account_file: "{{ service_account_file }}"
-        project: "{{ project_id }}"
+        project: "{{ project }}"
         zone: "{{ vm_zone }}"
         name: "{{ vm_name }}"
         status: TERMINATED
