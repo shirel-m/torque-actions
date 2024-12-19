@@ -1,22 +1,62 @@
 - name: Restart Aws EC2 
   hosts: localhost
   connection: local
+  vars:
+    optional_assume_role:
+      value: "{{ lookup('ansible.builtin.env', 'OPTIONAL_ASSUME_ROLE_ARN', default=undefined) }}"
   tasks:
-    - name: restart ec2 instance by its ID
-      amazon.aws.ec2_instance:
-        instance_ids:
-          - "{{ id }}"
-        region: "{{ (arn | split(':'))[3] }}"
-        state: restarted
-        wait: true
+    - name: restart ec2 instance by its ID with assumed role
+      when: optional_assume_role.value is defined
+      block:
+        - name: Assume AWS role
+          sts_assume_role:
+            role_arn: "{{ optional_assume_role.value }}"
+            role_session_name: "torque-session"
+          register: assumed_role
         
-    - name: gather information about the ec2 instance
-      amazon.aws.ec2_instance_info:
-        region: "{{ (arn | split(':'))[3] }}"
-        instance_ids:
-          - "{{ id }}"
-      register: result
-      
-    - copy:
-        content: "{{ result }}"
-        dest: qtorque_outputs.json
+        - name: restart ec2 instance by its ID
+          amazon.aws.ec2_instance:
+            aws_access_key: "{{ assumed_role.sts_creds.access_key }}"
+            aws_secret_key: "{{ assumed_role.sts_creds.secret_key }}"
+            aws_session_token: "{{ assumed_role.sts_creds.session_token }}"
+            instance_ids:
+              - "{{ id }}"
+            region: "{{ (arn | split(':'))[3] }}"
+            state: restarted
+            wait: true
+        
+        - name: gather information about the ec2 instance
+          amazon.aws.ec2_instance_info:
+            aws_access_key: "{{ assumed_role.sts_creds.access_key }}"
+            aws_secret_key: "{{ assumed_role.sts_creds.secret_key }}"
+            aws_session_token: "{{ assumed_role.sts_creds.session_token }}"
+            region: "{{ (arn | split(':'))[3] }}"
+            instance_ids:
+              - "{{ id }}"
+          register: result
+          
+        - copy:
+            content: "{{ result }}"
+            dest: qtorque_outputs.json
+    
+    - name: restart ec2 instance by its ID with default role
+      when: optional_assume_role.value is not defined
+      block:
+        - name: restart ec2 instance by its ID
+          amazon.aws.ec2_instance:
+            instance_ids:
+              - "{{ id }}"
+            region: "{{ (arn | split(':'))[3] }}"
+            state: restarted
+            wait: true
+            
+        - name: gather information about the ec2 instance
+          amazon.aws.ec2_instance_info:
+            region: "{{ (arn | split(':'))[3] }}"
+            instance_ids:
+              - "{{ id }}"
+          register: result
+          
+        - copy:
+            content: "{{ result }}"
+            dest: qtorque_outputs.json
