@@ -14,7 +14,7 @@
             role_session_name: "torque-session"
           register: assumed_role
         
-        - name: start ec2 instance by its ID
+        - name: restart ec2 instance by its ID
           amazon.aws.ec2_instance:
             aws_access_key: "{{ assumed_role.sts_creds.access_key }}"
             aws_secret_key: "{{ assumed_role.sts_creds.secret_key }}"
