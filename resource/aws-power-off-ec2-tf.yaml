@@ -9,7 +9,7 @@
       when: optional_assume_role.value is defined
       block:
         - name: Assume AWS role
-          sts_assume_role:
+          amazon.aws.sts_assume_role:
             role_arn: "{{ optional_assume_role.value }}"
             role_session_name: "torque-session"
           register: assumed_role
