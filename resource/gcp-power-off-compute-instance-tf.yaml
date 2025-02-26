@@ -26,7 +26,7 @@
     - name: Set auth_kind to serviceaccount if successful
       set_fact:
         auth_kind: serviceaccount
-      when: result.failed == false and has_service_account_file
+      when: has_service_account_file
     
     - name: Stop the GCP vm using Workload Identity Federation
       google.cloud.gcp_compute_instance:
