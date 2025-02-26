@@ -26,7 +26,7 @@
     - name: Set auth_kind to serviceaccount if successful
       set_fact:
         auth_kind: serviceaccount
-      when: has_service_account_file
+      when: result is defined and result.failed == false and has_service_account_file
     
     - name: Stop the GCP vm using Workload Identity Federation
       google.cloud.gcp_compute_instance:
@@ -42,7 +42,7 @@
     - name: Set auth_kind to application if successful
       set_fact:
         auth_kind: application
-      when: result.failed == false and auth_kind != "serviceaccount"
+      when: result is defined and result.failed == false and auth_kind != "serviceaccount"
 
     - name: Stop the GCP vm vm using machine account (last fallback)
       google.cloud.gcp_compute_instance:
@@ -57,7 +57,7 @@
     - name: Set auth_kind to machineaccount if successful
       set_fact:
         auth_kind: machineaccount
-      when: result.failed == false and auth_kind != "serviceaccount" and auth_kind != "application"
+      when: result is defined and result.failed == false and auth_kind != "serviceaccount" and auth_kind != "application"
         
     - name: gather information about the vm instance
       google.cloud.gcp_compute_instance_info:
