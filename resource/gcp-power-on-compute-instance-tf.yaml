@@ -21,6 +21,8 @@
       when: has_service_account_file
       register: result
       ignore_errors: yes
+      set_fact:
+        auth_kind: serviceaccount
     
     - name: Start the GCP vm using Workload Identity Federation
       google.cloud.gcp_compute_instance:
@@ -32,6 +34,8 @@
       when: not has_service_account_file or result.failed
       register: result
       ignore_errors: yes
+      set_fact:
+        auth_kind: application
     
     - name: Start the GCP vm using machine account (last fallback)
       google.cloud.gcp_compute_instance:
@@ -42,10 +46,12 @@
         status: RUNNING
       when: result.failed
       register: result
+      set_fact:
+        auth_kind: machineaccount
         
     - name: gather information about the vm instance
       google.cloud.gcp_compute_instance_info:
-        auth_kind: "{{ result.auth_kind }}"
+        auth_kind: "{{ auth_kind }}"
         service_account_file: "{{ service_account_file if result.auth_kind == 'serviceaccount' else omit }}"
         project: "{{ project }}"
         zone: "{{ zone }}"
