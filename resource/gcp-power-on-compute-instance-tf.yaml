@@ -57,7 +57,7 @@
     - name: Set auth_kind to machineaccount if successful
       set_fact:
         auth_kind: machineaccount
-      when: result.failed == false auth_kind != "serviceaccount" and auth_kind != "application"
+      when: result.failed == false and auth_kind != "serviceaccount" and auth_kind != "application"
       
     - name: gather information about the vm instance
       google.cloud.gcp_compute_instance_info:
