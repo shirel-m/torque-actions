@@ -77,7 +77,6 @@
             zone: "{{ zone }}"
             name: "{{ name }}"
             status: TERMINATED
-          register: result
         
         - name: gather information about the vm instance
           google.cloud.gcp_compute_instance_info:
