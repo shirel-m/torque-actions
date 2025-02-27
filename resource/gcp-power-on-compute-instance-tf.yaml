@@ -66,7 +66,7 @@
             dest: qtorque_outputs.json
     
     - name: Start the GCP vm using machine account (last fallback)
-      when: result is defined and result.failed
+      when: result is defined and (result.failed | default(false)) == false
       block:
         - name: Start the GCP vm using machine account (last fallback)
           google.cloud.gcp_compute_instance:
