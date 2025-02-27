@@ -50,35 +50,10 @@
             name: "{{ name }}"
             status: RUNNING
           register: result
-          ignore_errors: yes
         
         - name: gather information about the vm instance
           google.cloud.gcp_compute_instance_info:
             auth_kind: application
-            project: "{{ project }}"
-            zone: "{{ zone }}"
-            filters:
-              - "name={{ name }}"
-          register: vm_info
-          
-        - copy:
-            content: "{{ vm_info }}"
-            dest: qtorque_outputs.json
-    
-    - name: Start the GCP vm using machine account (last fallback)
-      when: result is defined and (result.failed | default(true))
-      block:
-        - name: Start the GCP vm using machine account (last fallback)
-          google.cloud.gcp_compute_instance:
-            auth_kind: machineaccount
-            project: "{{ project }}"
-            zone: "{{ zone }}"
-            name: "{{ name }}"
-            status: RUNNING  
-        
-        - name: gather information about the vm instance
-          google.cloud.gcp_compute_instance_info:
-            auth_kind: machineaccount
             project: "{{ project }}"
             zone: "{{ zone }}"
             filters:
