@@ -14,7 +14,7 @@
     - name: Start the GCP vm using service account file
       when: has_service_account_file
       block:
-        - name: Start the GCP vm
+        - name: Start the GCP vm using service account file
           google.cloud.gcp_compute_instance:
             auth_kind: serviceaccount
             service_account_file: "{{ service_account_file }}"
@@ -42,7 +42,7 @@
     - name: Start the GCP vm using Workload Identity Federation
       when: not has_service_account_file or result.failed
       block:
-        - name: Start the GCP vm
+        - name: Start the GCP vm using Workload Identity Federation
           google.cloud.gcp_compute_instance:
             auth_kind: application
             project: "{{ project }}"
@@ -55,7 +55,6 @@
         - name: gather information about the vm instance
           google.cloud.gcp_compute_instance_info:
             auth_kind: application
-            service_account_file: "{{ service_account_file}}"
             project: "{{ project }}"
             zone: "{{ zone }}"
             filters:
@@ -69,7 +68,7 @@
     - name: Start the GCP vm using machine account (last fallback)
       when: result.failed
       block:
-        - name: Start the GCP vm
+        - name: Start the GCP vm using machine account (last fallback)
           google.cloud.gcp_compute_instance:
             auth_kind: machineaccount
             project: "{{ project }}"
@@ -81,7 +80,6 @@
         - name: gather information about the vm instance
           google.cloud.gcp_compute_instance_info:
             auth_kind: machineaccount
-            service_account_file: "{{ service_account_file}}"
             project: "{{ project }}"
             zone: "{{ zone }}"
             filters:

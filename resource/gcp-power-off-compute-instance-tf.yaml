@@ -14,7 +14,7 @@
     - name: Stop the GCP vm using service account file
       when: has_service_account_file
       block:
-        - name: Stop the GCP vm
+        - name: Stop the GCP vm using service account file
           google.cloud.gcp_compute_instance:
             auth_kind: serviceaccount
             service_account_file: "{{ service_account_file }}"
@@ -43,7 +43,7 @@
     - name: Stop the GCP vm using Workload Identity Federation
       when: not has_service_account_file or result.failed
       block:
-        - name:
+        - name: Stop the GCP vm using Workload Identity Federation
           google.cloud.gcp_compute_instance:
             auth_kind: application
             project: "{{ project }}"
