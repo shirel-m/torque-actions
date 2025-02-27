@@ -67,10 +67,10 @@
             dest: qtorque_outputs.json
     
 
-    - name: Stop the GCP vm vm using machine account (last fallback)
-      when: result.failed
+    - name: Stop the GCP vm using machine account (last fallback)
+      when: result is defined and result.failed
       block:
-        - name:
+        - name: Stop the GCP vm using machine account (last fallback)
           google.cloud.gcp_compute_instance:
             auth_kind: machineaccount
             project: "{{ project }}"
