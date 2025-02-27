@@ -8,7 +8,6 @@
   vars:
     service_account_file: "{{ lookup('env', 'GOOGLE_APPLICATION_CREDENTIALS') }}"
     has_service_account_file: "{{ service_account_file | length > 0 and service_account_file is file }}"
-    auth_kind: ""
 
   tasks:
     - name: Stop the GCP vm using service account file
@@ -21,9 +20,7 @@
             project: "{{ project }}"
             zone: "{{ zone }}"
             name: "{{ name }}"
-            status: TERMINATED  
-          register: result
-          ignore_errors: yes
+            status: TERMINATED
 
         - name: gather information about the vm instance
           google.cloud.gcp_compute_instance_info:
@@ -41,7 +38,7 @@
     
     
     - name: Stop the GCP vm using Workload Identity Federation
-      when: not has_service_account_file or result.failed
+      when: not has_service_account_file
       block:
         - name: Stop the GCP vm using Workload Identity Federation
           google.cloud.gcp_compute_instance:
